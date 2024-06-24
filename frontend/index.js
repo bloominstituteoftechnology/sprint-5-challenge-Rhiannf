@@ -8,9 +8,38 @@ async function sprintChallenge5() { // Note the async keyword so you can use `aw
   // 🧠 Use Axios to GET learners and mentors.
   // ❗ Use the variables `mentors` and `learners` to store the data.
   // ❗ Use the await keyword when using axios.
+  const footer = document.querySelector('footer')
+  
+  footer.textContent = `© BLOOM INSTITUTE OF TECHNOLOGY`
+
+  const cards = document.querySelector(".cards");
+
+  function updateHeaderText(text) {
+    const header = document.querySelector('header p');
+
+    if (header) {
+      header.textContent = text;
+    }
+  }
+
+  async function getLearnersFromAPI(apiUrl) {
+    try {
+      const response = await fetch(apiUrl);
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Fetch error:', error);
+      return [];
+    }
+  }
+  
+
 
   let mentors = [] // fix this
-  let learners = [] // fix this
+  let learner = [] // fix this
 
   // 👆 ==================== TASK 1 END ====================== 👆
 
@@ -28,30 +57,96 @@ async function sprintChallenge5() { // Note the async keyword so you can use `aw
   //     "Grace Hopper"
   //   ]`
   // }
+  function getMentorDetails(mentorId, mentorList) {
+    const mentor = mentorList.find(mentor => mentor.id === mentorId);
+    return mentor;
+  }
 
-  // 👆 ==================== TASK 2 END ====================== 👆
+  async function createCard({id, fullName, email, mentors}) {
+    const cardElement = document.createElement('div');
+    cardElement.classList.add('card');
 
-  const cardsContainer = document.querySelector('.cards')
-  const info = document.querySelector('.info')
-  info.textContent = 'No learner is selected'
+    const name = document.createElement('h3');
+    name.textContent = `${fullName}`;
+
+    const contact = document.createElement('div');
+    contact.textContent = `${email}`;
+
+    const teacher = document.createElement('h4');
+    teacher.classList.add('closed');
+    teacher.textContent = `Mentors`;
+
+    const mentorListElement = document.createElement('ul');
+    mentorListElement.classList.add('closed');
+    
+    mentors.forEach(mentorId => {
+      const mentor = getMentorDetails(mentorId, mentorList);
+      const mentorItem = document.createElement('li');
+      mentorItem.textContent = `${mentor.firstName} ${mentor.lastName}`;
+      mentorListElement.appendChild(mentorItem);
+    })
+
+    cardElement.appendChild(name);
+    cardElement.appendChild(contact);
+    cardElement.appendChild(teacher);
+    cardElement.appendChild(mentorListElement);
+
+    cardElement.addEventListener("click", () => {
+      const cardsContainer = document.querySelector(".cards");
+      const selectedCard = cardsContainer.querySelector(".selected");
+      if(!cardElement.classList.contains("selected")){
+        cardElement.classList.add("selected");
+      }
+      if(selectedCard){
+        selectedCard.classList.remove("selected");
+      }
+      const isSelected = cardElement.classList.contains("selected");
+      const leanerIdElement = name.querySelector('.leaner-id');
+      if(isSelected) {
+        if(!leanerIdElement) {
+          const learnerId = document.createElement('span');
+          learnerId.textContent = ` ID ${id}`;
+          learnerId.classList.add('leaner-id');
+          name.textContent = `${fullName},`;
+          name.appendChild(learnerId);
+        }
+        updateHeaderText(`the selected learner is ${fullName}`); 
+      } else {
+        if (leanerIdElement) {
+          name.textContent = `${fullName}`;
+          leanerIdElement.remove();
+          updateHeaderText('No learner is selected');
+        }
+      }
+    })
+  // toggle mentor list
+  teacher.addEventListener("click", () => {
+    teacher.classList.toggle("open");
+    teacher.classList.toggle("closed");
+  });
+
+  cards.appendChild(cardElement);
+  }
+
+  const learnerApiUrl = "http://localhost:3003/api/learners";
+  const mentorApiUrl = "http://localhost:3003/api/mentors";
 
 
   // 👇 ==================== TASK 3 START ==================== 👇
-
-  for (let learner of learners) { // looping over each learner object
 
     // 🧠 Flesh out the elements that describe each learner
     // ❗ Give the elements below their (initial) classes, textContent and proper nesting.
     // ❗ Do not change the variable names, as the code that follows depends on those names.
     // ❗ Also, loop over the mentors inside the learner object, creating an <li> element for each mentor.
-    // ❗ Fill each <li> with a mentor name, and append it to the <ul> mentorList.
-    // ❗ Inspect the mock site closely to understand what the initial texts and classes look like!
+  
+    const[learners, mentorList] = await Promise.all([
+    getLearnersFromAPI(learnerApiUrl),
+    getMentorsFromAPI(mentorApiUrl)
+  ]);
+  
+  learners.forEach(createCard);
 
-    const card = document.createElement('div')
-    const heading = document.createElement('h3')
-    const email = document.createElement('div')
-    const mentorsHeading = document.createElement('h4')
-    const mentorsList = document.createElement('ul')
+    
 
     // 👆 ==================== TASK 3 END ====================== 👆
 
@@ -102,7 +197,7 @@ async function sprintChallenge5() { // Note the async keyword so you can use `aw
   const footer = document.querySelector('footer')
   const currentYear = new Date().getFullYear()
   footer.textContent = `© BLOOM INSTITUTE OF TECHNOLOGY ${currentYear}`
-}
+
 
 // ❗ DO NOT CHANGE THIS CODE. WORK ONLY INSIDE TASKS 1, 2, 3
 if (typeof module !== 'undefined' && module.exports) module.exports = { sprintChallenge5 }
