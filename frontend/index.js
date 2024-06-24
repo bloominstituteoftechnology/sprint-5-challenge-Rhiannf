@@ -153,52 +153,8 @@ async function sprintChallenge5() { // Note the async keyword so you can use `aw
     // 👆 WORK ONLY ABOVE THIS LINE 👆
     // 👆 WORK ONLY ABOVE THIS LINE 👆
     // 👆 WORK ONLY ABOVE THIS LINE 👆
-    card.appendChild(mentorsList)
-    card.dataset.fullName = learner.fullName
-    cardsContainer.appendChild(card)
-
-    card.addEventListener('click', evt => {
-      const mentorsHeading = card.querySelector('h4')
-      // critical booleans
-      const didClickTheMentors = evt.target === mentorsHeading
-      const isCardSelected = card.classList.contains('selected')
-      // do a reset of all learner names, selected statuses, info message
-      document.querySelectorAll('.card').forEach(crd => {
-        crd.classList.remove('selected')
-        crd.querySelector('h3').textContent = crd.dataset.fullName
-      })
-      info.textContent = 'No learner is selected'
-      // conditional logic
-      if (!didClickTheMentors) {
-        // easy case, no mentor involvement
-        if (!isCardSelected) {
-          // selecting the card:
-          card.classList.add('selected')
-          heading.textContent += `, ID ${learner.id}`
-          info.textContent = `The selected learner is ${learner.fullName}`
-        }
-      } else {
-        // clicked on mentors, we toggle and select no matter what
-        card.classList.add('selected')
-        if (mentorsHeading.classList.contains('open')) {
-          mentorsHeading.classList.replace('open', 'closed')
-        } else {
-          mentorsHeading.classList.replace('closed', 'open')
-        }
-        if (!isCardSelected) {
-          // if card was not selected adjust texts
-          heading.textContent += `, ID ${learner.id}`
-          info.textContent = `The selected learner is ${learner.fullName}`
-        }
-      }
-    })
-  }
-
-  const footer = document.querySelector('footer')
-  const currentYear = new Date().getFullYear()
-  footer.textContent = `© BLOOM INSTITUTE OF TECHNOLOGY ${currentYear}`
-
 
 // ❗ DO NOT CHANGE THIS CODE. WORK ONLY INSIDE TASKS 1, 2, 3
 if (typeof module !== 'undefined' && module.exports) module.exports = { sprintChallenge5 }
 else sprintChallenge5()
+} 
