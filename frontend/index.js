@@ -1,3 +1,4 @@
+
 async function sprintChallenge5() { // Note the async keyword so you can use `await` inside sprintChallenge5
   // 👇 WORK ONLY BELOW THIS LINE 👇
   // 👇 WORK ONLY BELOW THIS LINE 👇
@@ -8,6 +9,9 @@ async function sprintChallenge5() { // Note the async keyword so you can use `aw
   // 🧠 Use Axios to GET learners and mentors.
   // ❗ Use the variables `mentors` and `learners` to store the data.
   // ❗ Use the await keyword when using axios.
+  let mentor = []
+  let teacher = []
+
   const footer = document.querySelector('footer')
   
   footer.textContent = `© BLOOM INSTITUTE OF TECHNOLOGY`
@@ -35,12 +39,21 @@ async function sprintChallenge5() { // Note the async keyword so you can use `aw
       return [];
     }
   }
+
+  async function getMentorsFromAPI(apiUrl) {
+    try {
+      const response = await fetch(apiUrl);
+      if(!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      const data = await response.json();
+      return data;
+    } catch(error) {
+      console.error('Fetch error: ', error);
+      return [];
+    }
+  }
   
-
-
-  let mentors = [] // fix this
-  let learner = [] // fix this
-
   // 👆 ==================== TASK 1 END ====================== 👆
 
   // 👇 ==================== TASK 2 START ==================== 👇
@@ -153,8 +166,8 @@ async function sprintChallenge5() { // Note the async keyword so you can use `aw
     // 👆 WORK ONLY ABOVE THIS LINE 👆
     // 👆 WORK ONLY ABOVE THIS LINE 👆
     // 👆 WORK ONLY ABOVE THIS LINE 👆
-
+}
 // ❗ DO NOT CHANGE THIS CODE. WORK ONLY INSIDE TASKS 1, 2, 3
 if (typeof module !== 'undefined' && module.exports) module.exports = { sprintChallenge5 }
 else sprintChallenge5()
-} 
+ 

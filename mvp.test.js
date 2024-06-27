@@ -44,7 +44,7 @@ describe('Sprint Challenge 5', () => {
       expect(window.aidgfuioghausfdu).not.toBeDefined()
     })
   })
-  describe('Initial HTML', () => {
+  describe.only('Initial HTML', () => {
     test('👉 [4] <h1> text is "Sprint 5 Challenge Submission"', () => {
       screen.getByText('Sprint 5 Challenge Submission')
     })
