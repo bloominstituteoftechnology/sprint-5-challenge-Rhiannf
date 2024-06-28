@@ -33,6 +33,7 @@ async function sprintChallenge5() { // Note the async keyword so you can use `aw
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
       const data = await response.json();
+      updateHeaderText('No learner is selected');
       return data;
     } catch (error) {
       console.error('Fetch error:', error);
@@ -123,7 +124,7 @@ async function sprintChallenge5() { // Note the async keyword so you can use `aw
           name.textContent = `${fullName},`;
           name.appendChild(learnerId);
         }
-        updateHeaderText(`the selected learner is ${fullName}`); 
+        updateHeaderText(`The selected learner is ${fullName}`); 
       } else {
         if (leanerIdElement) {
           name.textContent = `${fullName}`;
